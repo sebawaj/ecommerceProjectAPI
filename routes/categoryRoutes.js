@@ -1,39 +1,41 @@
 const express = require("express");
 const router = express.Router();
-
-const adminController = require("../controllers/adminController");
+const categoryController = require("../controllers/categoryController");
 var { expressjwt: jwt } = require("express-jwt");
+
 const isAdmin = require("../Middleware/isAdmin");
 
-// Rutas relacionadas al panel de control (Admin):
-// ...
-
-router.post("/tokens", adminController.token);
-
+router.get("/", categoryController.index);
 router.get(
-  "/",
+  "/crear",
   jwt({ secret: process.env.API_SECRET, algorithms: ["HS256"] }),
   isAdmin,
-  adminController.index,
+  categoryController.create,
 );
 router.post(
   "/",
   jwt({ secret: process.env.API_SECRET, algorithms: ["HS256"] }),
   isAdmin,
-  adminController.store,
+  categoryController.store,
 );
-
+router.get("/:id", categoryController.show);
+router.get(
+  "/:id/editar",
+  jwt({ secret: process.env.API_SECRET, algorithms: ["HS256"] }),
+  isAdmin,
+  categoryController.edit,
+);
 router.patch(
   "/:id",
   jwt({ secret: process.env.API_SECRET, algorithms: ["HS256"] }),
   isAdmin,
-  adminController.update,
+  categoryController.update,
 );
 router.delete(
   "/:id",
   jwt({ secret: process.env.API_SECRET, algorithms: ["HS256"] }),
   isAdmin,
-  adminController.destroy,
+  categoryController.destroy,
 );
 
 module.exports = router;

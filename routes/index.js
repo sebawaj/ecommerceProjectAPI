@@ -4,8 +4,12 @@
  */
 
 const userRoutes = require("./userRoutes");
-const articleRoutes = require("./articleRoutes");
-const commentRoutes = require("./commentRoutes");
+const productRoutes = require("./productRoutes");
+const categoryRoutes = require("./categoryRoutes");
+const orderRoutes = require("./orderRoutes");
+const reviewRoutes = require("./reviewRoutes");
+
+//const commentRoutes = require("./commentRoutes");
 
 /**
  * Otra alternativa podría ser organizar las rutas según su nivel de
@@ -27,11 +31,19 @@ module.exports = (app) => {
    * nombres de variables, funciones, etc, que siempre se recomienda que estén
    * en inglés.
    */
+  app.get("/", (req, res) => {
+    res.send("Working");
+  });
 
-  app.use("/usuarios", userRoutes);
-  app.use("/articulos", articleRoutes);
-  app.use("/comentarios", commentRoutes);
+  app.use("/users", userRoutes);
+  app.use("/products", productRoutes);
+  app.use("/categories", categoryRoutes);
+  app.use("/orders", orderRoutes);
+  app.use("/reviews", reviewRoutes);
 
   app.use("/", publicRoutes);
-  app.use("/panel", privateRoutes);
+  app.use("/admin", privateRoutes);
+  app.use("*", (req, res) => {
+    res.send("404");
+  });
 };

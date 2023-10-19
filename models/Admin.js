@@ -1,13 +1,9 @@
 const { Model, DataTypes } = require("sequelize");
 const bcrypt = require("bcryptjs");
 
-async function hashPassword(user) {
-  user.password = await bcrypt.hash(user.password, 12);
-}
-
-class User extends Model {
+class Admin extends Model {
   static initModel(sequelize) {
-    User.init(
+    Admin.init(
       {
         id: {
           type: DataTypes.BIGINT.UNSIGNED,
@@ -32,20 +28,11 @@ class User extends Model {
         },
         email: {
           type: DataTypes.STRING,
-          unique: true,
           allowNull: false,
           validate: {
             notNull: { msg: "email is required" },
             notEmpty: true,
             isEmail: true,
-          },
-        },
-        address: {
-          type: DataTypes.STRING,
-          allowNull: false,
-          validate: {
-            notNull: { msg: "address is required" },
-            notEmpty: true,
           },
         },
         password: {
@@ -56,42 +43,29 @@ class User extends Model {
             notEmpty: true,
           },
         },
-        phone: {
-          type: DataTypes.STRING,
-          allowNull: false,
-          validate: {
-            notNull: { msg: "phone is required" },
-            notEmpty: true,
-          },
-        },
-        avatar: {
-          type: DataTypes.STRING,
-          allowNull: false,
-        },
       },
       {
         sequelize,
-        modelName: "user",
+        modelName: "admin",
+        hooks: {
+          beforeCreate: async (admin) => {
+            const hashedPassword = await bcrypt.hash(admin.password, 12);
+            admin.password = hashedPassword;
+          },
+          beforeUpdate: async (admin) => {
+            const hashedPassword = await bcrypt.hash(admin.password, 12);
+            admin.password = hashedPassword;
+          },
+          beforeBulkCreate: async (admins) => {
+            admins.map(async (admin) => {
+              const hashedPassword = await bcrypt.hash(admin.password, 12);
+              admin.password = hashedPassword;
+            });
+          },
+        },
       },
     );
-
-    User.beforeCreate(async (user) => {
-      await hashPassword(user);
-    });
-
-    User.beforeUpdate(async (user) => {
-      if (user.changed("password")) {
-        await hashPassword(user);
-      }
-    });
-
-    User.beforeBulkCreate(async (users) => {
-      for (let user of users) {
-        await hashPassword(user);
-      }
-    });
-
-    return User;
+    return Admin;
   }
   async isValidPassword(password) {
     return await bcrypt.compare(password, this.password);
@@ -103,4 +77,4 @@ class User extends Model {
   }
 }
 
-module.exports = User;
+module.exports = Admin;

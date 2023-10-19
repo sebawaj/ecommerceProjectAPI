@@ -1,32 +1,65 @@
 const { Sequelize } = require("sequelize");
 
+const sequelizeOptions = {
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  dialect: process.env.DB_CONNECTION,
+  logging: false,
+};
+if (process.env.DB_CONNECTION === "postgres") {
+  sequelizeOptions.dialectModule = require("pg");
+}
 const sequelize = new Sequelize(
-  process.env.DB_DATABASE, // Ej: hack_academy_db
-  process.env.DB_USERNAME, // Ej: root
-  process.env.DB_PASSWORD, // Ej: root
-  {
-    host: process.env.DB_HOST, // Ej: 127.0.0.1
-    dialect: process.env.DB_CONNECTION, // Ej: mysql
-    logging: false, // Para que no aparezcan mensajes en consola.
-  },
+  process.env.DB_DATABASE,
+  process.env.DB_USERNAME,
+  process.env.DB_PASSWORD,
+  sequelizeOptions,
 );
 
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Connection has been established successfully.");
+  })
+  .catch((error) => {
+    console.error("Unable to connect to the database: ", error);
+  });
+
 const User = require("./User");
-const Comment = require("./Comment");
-const Article = require("./Article");
+const Category = require("./Category");
+const Admin = require("./Admin");
+const Product = require("./Product");
+const Order = require("./Order");
+const Review = require("./Review");
 
 User.initModel(sequelize);
-Comment.initModel(sequelize);
-Article.initModel(sequelize);
+Admin.initModel(sequelize);
+Category.initModel(sequelize);
+Product.initModel(sequelize);
+Order.initModel(sequelize);
+Review.initModel(sequelize);
 
-/**
- * Luego de definir los modelos, se pueden establecer relaciones entre los
- * mismos (usando métodos como belongsTo, hasMany y belongsToMany)...
- */
+User.hasMany(Order);
+Order.belongsTo(User);
+
+Admin.hasMany(Order);
+Order.belongsTo(Admin);
+
+Category.hasMany(Product);
+Product.belongsTo(Category);
+
+User.hasMany(Review);
+Review.belongsTo(User);
+
+Product.hasMany(Review);
+Review.belongsTo(Product);
 
 module.exports = {
   sequelize,
   User,
-  Comment,
-  Article,
+  Admin,
+  Product,
+  Category,
+  Order,
+  Review,
 };

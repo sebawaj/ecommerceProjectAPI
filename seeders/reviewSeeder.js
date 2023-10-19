@@ -20,21 +20,18 @@
  *
  */
 
-const { faker } = require("@faker-js/faker");
-const { Article } = require("../models");
-
-faker.locale = "es";
+const { Review } = require("../models");
 
 module.exports = async () => {
-  const articles = [];
+  const reviews = [];
 
-  for (let i = 0; i < 3000; i++) {
-    articles.push({
+  for (let i = 0; i < 1000; i++) {
+    reviews.push({
       title: faker.lorem.sentence(5),
       content: faker.lorem.paragraphs(),
     });
   }
 
-  await Article.bulkCreate(articles);
-  console.log("[Database] Se corrió el seeder de Articles.");
+  await Review.bulkCreate(reviews);
+  return console.log("[Database] Se corrió el seeder de Articles.");
 };
