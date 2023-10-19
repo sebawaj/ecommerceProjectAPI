@@ -2,9 +2,9 @@ const { Admin } = require("../models");
 
 module.exports = async () => {
   const admin = {
-    firstname: "Juan",
-    lastname: "Pérez",
-    email: "admin@1234.com",
+    firstname: "Sebastian",
+    lastname: "Wajshan",
+    email: "sebawajshan@gmail.com",
     password: "1234",
   };
 

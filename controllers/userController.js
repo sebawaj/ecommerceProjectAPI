@@ -56,7 +56,7 @@ async function sendMail(req, res) {
     const token = jwt.sign({ email: user.email, id: user.id }, process.env.API_SECRET);
     let link = `${process.env.APP_DOMAIN}/resetpassword/${token}`;
     let mailOptions = {
-      from: `"Manos Creativas" <${process.env.EMAIL_USER}>`, // sender address
+      from: `"Atid Uniformes" <${process.env.EMAIL_USER}>`, // sender address
       to: user.email, // list of receivers
       subject: "Restablecer Contraseña", // Subject line
       html: `

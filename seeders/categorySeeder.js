@@ -25,23 +25,31 @@ const { Category } = require("../models");
 module.exports = async () => {
   const categories = [
     {
-      name: "Pinturas",
+      name: "Remeras",
       img: "Pintura_beige.avif",
     },
     {
-      name: "Cerámicas",
+      name: "Pantalones",
       img: "Ceramica_Conejo.webp",
     },
     {
-      name: "Maderas",
+      name: "Camisas",
       img: "Madera_Bowl.webp",
     },
     {
-      name: "Tejidos",
+      name: "Buzos",
       img: "Tejido_Beagle.webp",
     },
     {
-      name: "Decoraciones",
+      name: "Camperas",
+      img: "Ceramica_Taza.webp",
+    },
+    {
+      name: "Bermudas",
+      img: "Ceramica_Taza.webp",
+    },
+    {
+      name: "Otros",
       img: "Ceramica_Taza.webp",
     },
   ];
